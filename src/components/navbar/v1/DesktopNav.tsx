@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
 import { navLinks, ctaLink } from '../data/navbar.data';
-import type { NavLink, NavLinkWithChildren } from '../types/navbar.types';
+import type { } from '../types/navbar.types';
 
 export function DesktopNav() {
   const pathname = usePathname();

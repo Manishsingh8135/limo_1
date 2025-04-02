@@ -13,7 +13,7 @@ import {
   SheetTrigger,
   SheetClose,
 } from "@/components/ui/sheet";
-import { Menu, X, ChevronDown, ChevronRight, Phone } from 'lucide-react';
+import { Menu, X, ChevronDown, Phone } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 import { navLinks, ctaLink, contactInfo } from '../data/navbar.data';

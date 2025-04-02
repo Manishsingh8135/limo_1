@@ -2,6 +2,16 @@
 @import "tw-animate-css";
 @import "./slate-colors.css";
 
+/* Custom classes for components */
+.bg-gradient-shine {
+  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1), transparent);
+  background-size: 200% 100%;
+}
+
+.hero-background {
+  background-image: url('/images/hero/chicago-skyline-night.jpg');
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

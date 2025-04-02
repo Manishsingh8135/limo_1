@@ -3,12 +3,11 @@
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
-import { motion } from "framer-motion"
 
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all duration-300 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-primary/30 relative overflow-hidden font-serif tracking-wide",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all duration-300 cursor-pointer disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-primary/30 relative overflow-hidden font-serif tracking-wide",
   {
     variants: {
       variant: {
@@ -63,7 +62,7 @@ function Button({
   const Comp = asChild ? Slot : "button"
 
   // If animation is disabled or it's a link variant, use regular component
-  if (!animate || variant === "link" as any) {
+  if (!animate || variant === "link") {
     return (
       <Comp
         data-slot="button"
@@ -87,16 +86,5 @@ function Button({
   )
 }
 
-// Animation variants for Framer Motion
-const buttonAnimationVariants = {
-  hover: {
-    scale: 1.02,
-    transition: { duration: 0.3, type: "spring", stiffness: 300 }
-  },
-  tap: {
-    scale: 0.98,
-    transition: { duration: 0.1 }
-  }
-};
-
-export { Button, buttonVariants }
+// Export Button component
+export { Button }

@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 
 // Import our modular components
 import { Logo } from './Logo';
-import { TopBar } from './TopBar';
 import { DesktopNav } from './DesktopNav';
 import { MobileNav } from './MobileNav';
 

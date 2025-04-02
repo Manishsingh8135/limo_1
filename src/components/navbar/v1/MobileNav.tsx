@@ -1,28 +1,37 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useSession, signOut } from 'next-auth/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-  SheetClose,
-} from "@/components/ui/sheet";
-import { Menu, X, ChevronDown, Phone } from 'lucide-react';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
+import { Menu, X, ChevronDown, Phone, CheckCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-import { navLinks, ctaLink, contactInfo } from '../data/navbar.data';
+import { navLinks, contactInfo } from '../data/navbar.data';
 import type { NavLink, NavLinkWithChildren } from '../types/navbar.types';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 export function MobileNav() {
   const pathname = usePathname();
+  const { status } = useSession();
   const [isOpen, setIsOpen] = useState(false);
   const [openDropdowns, setOpenDropdowns] = useState<Record<string, boolean>>({});
+  const [showSignOutAlert, setShowSignOutAlert] = useState(false);
+  const prevStatusRef = useRef<string | undefined>(status);
+
+  useEffect(() => {
+    // Check if status changed from authenticated to unauthenticated
+    if (prevStatusRef.current === 'authenticated' && status === 'unauthenticated') {
+      setShowSignOutAlert(true);
+      const timer = setTimeout(() => {
+        setShowSignOutAlert(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+    prevStatusRef.current = status;
+  }, [status]);
 
   const toggleDropdown = (href: string) => {
     setOpenDropdowns(prev => ({
@@ -196,22 +205,36 @@ export function MobileNav() {
             {navLinks.map((link) => renderNavLink(link))}
           </motion.div>
           
+          {/* Auth Controls (Login/Logout) */}
           <div className="mt-8 px-5 py-6 border-t border-border/30 rounded-t-xl">
-            <Button 
-              asChild 
-              size="lg"
-              className="w-full"
-            >
-              <Link 
-                href={ctaLink.href} 
-                aria-label={ctaLink.ariaLabel}
-                onClick={() => setIsOpen(false)}
+            {status === 'loading' && (
+              <Button size="lg" className="w-full opacity-50" disabled>
+                Loading...
+              </Button>
+            )}
+            {status === 'unauthenticated' && (
+              <Button asChild size="lg" className="w-full">
+                <Link href="/login" aria-label="Sign In" onClick={() => setIsOpen(false)}>
+                  Sign In
+                </Link>
+              </Button>
+            )}
+            {status === 'authenticated' && (
+              <Button
+                size="lg"
+                variant="secondary" 
+                className="w-full text-slate-300 hover:text-slate-50 hover:bg-slate-800"
+                onClick={() => {
+                  signOut({ callbackUrl: '/' });
+                  setIsOpen(false);
+                }}
+                aria-label="Sign Out"
               >
-                {ctaLink.label}
-              </Link>
-            </Button>
+                Sign Out
+              </Button>
+            )}
           </div>
-          
+
           {contactInfo && (
             <div className="mt-6 px-5 rounded-xl">
               <div className="flex flex-col gap-3">
@@ -237,6 +260,25 @@ export function MobileNav() {
           )}
         </SheetContent>
       </Sheet>
+
+      {/* Sign Out Success Alert */}
+      <AnimatePresence>
+        {showSignOutAlert && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.3 }}
+            className="fixed bottom-5 left-1/2 transform -translate-x-1/2 w-auto z-[100]" // Ensure high z-index
+          >
+            <Alert className="bg-green-100 border-green-400 text-green-700 shadow-lg">
+              <CheckCircle className="h-4 w-4" />
+              <AlertTitle>Success!</AlertTitle>
+              <AlertDescription>You have been successfully signed out.</AlertDescription>
+            </Alert>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

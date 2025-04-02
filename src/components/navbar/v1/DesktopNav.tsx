@@ -3,24 +3,41 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useSession, signOut } from 'next-auth/react'; 
+import { useState, useEffect, useRef } from 'react'; 
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'; 
+import { CheckCircle } from 'lucide-react'; 
 
-import { navLinks, ctaLink } from '../data/navbar.data';
+import { navLinks } from '../data/navbar.data';
 import type { } from '../types/navbar.types';
 
 export function DesktopNav() {
   const pathname = usePathname();
-  
+  const { status } = useSession(); 
+  const [showSignOutAlert, setShowSignOutAlert] = useState(false);
+  const prevStatusRef = useRef<string | undefined>(status);
+
+  useEffect(() => {
+    if (prevStatusRef.current === 'authenticated' && status === 'unauthenticated') {
+      setShowSignOutAlert(true);
+      const timer = setTimeout(() => {
+        setShowSignOutAlert(false);
+      }, 3000);
+      return () => clearTimeout(timer); 
+    }
+    prevStatusRef.current = status;
+  }, [status]);
+
   const isActive = (href: string) => {
     return pathname === href || pathname.startsWith(`${href}/`);
   };
 
   const [openDropdown, setOpenDropdown] = React.useState<string | null>(null);
 
-  // Animation variants for dropdown menu
   const dropdownVariants = {
     hidden: { opacity: 0, y: -5, scale: 0.98 },
     visible: { 
@@ -37,13 +54,11 @@ export function DesktopNav() {
     }
   };
 
-  // Animation variants for menu items
   const menuItemVariants = {
     rest: { scale: 1 },
     hover: { scale: 1.01 }
   };
 
-  // Underline animation variants
   const underlineVariants = {
     rest: { width: 0, left: '50%', right: '50%' },
     hover: { width: '100%', left: 0, right: 0 }
@@ -53,7 +68,6 @@ export function DesktopNav() {
     <div className="hidden md:flex items-center gap-8">
       <nav className="flex items-center gap-8">
         {navLinks.map((link) => {
-          // Check if link has children (dropdown)
           if ('children' in link) {
             const isDropdownOpen = openDropdown === link.href;
             
@@ -146,7 +160,6 @@ export function DesktopNav() {
             );
           }
           
-          // Regular link without dropdown
           return (
             <motion.div 
               key={link.href}
@@ -175,17 +188,39 @@ export function DesktopNav() {
           );
         })}
       </nav>
-      
-      {/* CTA Button */}
-      <Button 
-        asChild 
-        size="sm"
-        className="ml-4"
+
+      <motion.div
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+        className="flex items-center gap-x-2"
       >
-        <Link href={ctaLink.href} aria-label={ctaLink.ariaLabel}>
-          {ctaLink.label}
-        </Link>
-      </Button>
+        {status === 'authenticated' ? (
+          <Button
+            variant="secondary" 
+            size="sm"
+            onClick={() => signOut({ callbackUrl: '/' })} 
+          >
+            Sign Out
+          </Button>
+        ) : (
+          <Button variant="default" size="sm" asChild>
+            <Link href="/login" aria-label="Sign In">
+              Sign In
+            </Link>
+          </Button>
+        )}
+      </motion.div>
+
+      {showSignOutAlert && (
+        <Alert className="fixed bottom-5 right-5 w-auto z-50 bg-green-100 border-green-400 text-green-700">
+          <CheckCircle className="h-4 w-4" />
+          <AlertTitle>Success!</AlertTitle>
+          <AlertDescription>
+            You have been successfully signed out.
+          </AlertDescription>
+        </Alert>
+      )}
     </div>
   );
 }

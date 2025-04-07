@@ -1,5 +1,4 @@
-import { HeroConfig, Location, PopularLocation, RideType, TimeOption, VehicleOption } from '../types/hero.types';
-import { businessData } from '@/data/business';
+import { Location, PopularLocation, VehicleOption, TimeOption, HeroConfig, RideType } from '../types/hero.types';
 
 // Default pickup location - O'Hare Airport Chicago
 export const defaultPickupLocation: Location = {
@@ -187,7 +186,7 @@ export const vehicleOptions: VehicleOption[] = [
     },
     pricePerMile: 3.5,
     basePrice: 85,
-    image: '/images/vehicles/luxury-sedan.jpg',
+    image: 'https://images.unsplash.com/photo-1549399542-7e8f29e5c74a?q=80&w=1200&auto=format&fit=crop',
     features: [
       'Premium leather seating',
       'Climate control',
@@ -201,14 +200,14 @@ export const vehicleOptions: VehicleOption[] = [
     id: 'executive-suv',
     type: 'suv',
     name: 'Executive SUV',
-    description: 'Spacious luxury for small groups with extra luggage',
+    description: 'Spacious luxury for small groups with additional luggage capacity',
     capacity: {
       passengers: 6,
       luggage: 6
     },
-    pricePerMile: 4.2,
-    basePrice: 110,
-    image: '/images/vehicles/executive-suv.jpg',
+    pricePerMile: 4.5,
+    basePrice: 120,
+    image: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?q=80&w=1200&auto=format&fit=crop',
     features: [
       'Spacious leather seating',
       'Tri-zone climate control',
@@ -220,16 +219,16 @@ export const vehicleOptions: VehicleOption[] = [
   },
   {
     id: 'stretch-limousine',
-    type: 'stretch',
+    type: 'limousine',
     name: 'Stretch Limousine',
-    description: 'The epitome of luxury for special occasions',
+    description: 'The ultimate in luxury transportation for special occasions',
     capacity: {
       passengers: 10,
-      luggage: 4
+      luggage: 6
     },
-    pricePerMile: 5.8,
-    basePrice: 180,
-    image: '/images/vehicles/stretch-limo.jpg',
+    pricePerMile: 5.5,
+    basePrice: 220,
+    image: 'https://images.unsplash.com/photo-1585637071663-0656e789d882?q=80&w=1200&auto=format&fit=crop',
     features: [
       'Extended passenger compartment',
       'Premium entertainment system',
@@ -241,16 +240,16 @@ export const vehicleOptions: VehicleOption[] = [
   },
   {
     id: 'executive-sprinter',
-    type: 'sprinter',
+    type: 'van',
     name: 'Executive Sprinter',
-    description: 'Luxury group transportation with ample space',
+    description: 'Premium group transportation with executive amenities',
     capacity: {
       passengers: 14,
       luggage: 14
     },
-    pricePerMile: 6.5,
-    basePrice: 220,
-    image: '/images/vehicles/executive-sprinter.jpg',
+    pricePerMile: 6.0,
+    basePrice: 180,
+    image: 'https://images.unsplash.com/photo-1464219789935-c2d9d9aba644?q=80&w=1200&auto=format&fit=crop',
     features: [
       'Executive seating configuration',
       'High ceiling for easy movement',
@@ -298,10 +297,10 @@ export const rideTypes: RideType[] = [
 
 // Hero section configuration
 export const heroConfig: HeroConfig = {
-  title: businessData.company.name,
-  subtitle: "Luxury Transportation for Discerning Clients",
-  backgroundImage: "/images/hero/chicago-skyline-night.jpg",
-  backgroundVideo: "/videos/hero/luxury-ride.mp4",
+  title: 'All American Limousine',
+  subtitle: 'Luxury Transportation in Chicago',
+  backgroundImage: 'https://images.unsplash.com/photo-1494522855154-9297ac14b55f?q=80&w=1800&auto=format&fit=crop',
+  backgroundVideo: 'https://player.vimeo.com/external/308162286.hd.mp4?s=9f9723d91f96b9872965e4f573eb7c90c8e3b51e&profile_id=175&oauth2_token_id=57447761',
   defaultPickupLocation,
   popularLocations,
   vehicleOptions,

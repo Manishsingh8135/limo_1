@@ -3,7 +3,7 @@ import NextAuth, { type AuthOptions, type SessionStrategy, type User, type Sessi
 import type { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { Role } from "@prisma/client";
 import { DefaultSession } from "next-auth";
